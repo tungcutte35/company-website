@@ -6,17 +6,106 @@ import Image from "next/image";
 import Button from "./ui/Button";
 import HeroBg from "@/public/images/hero-img.webp";
 import Logo from "@/public/images/logo.jpg";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ChevronDown, Building2, Users } from "lucide-react";
 import gsap from "gsap";
+
+// Dropdown Menu Component
+const DropdownMenu = ({ 
+  label, 
+  items, 
+  isScrolled 
+}: { 
+  label: string; 
+  items: { label: string; href: string; icon: React.ReactNode; description: string }[];
+  isScrolled: boolean;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div 
+      ref={dropdownRef}
+      className="relative"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <button
+        className={`flex items-center gap-1 transition-colors font-semibold ${
+          isScrolled 
+            ? "text-slate-600 hover:text-blue-600" 
+            : "text-slate-200 hover:text-blue-400 drop-shadow-sm"
+        }`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {label}
+        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+
+      {/* Dropdown Panel */}
+      <div className={`absolute top-full left-0 pt-2 transition-all duration-200 ${isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"}`}>
+        <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-1  min-w-[230px]">
+          {items.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="flex items-start gap-3 p-2 rounded-lg hover:bg-blue-50 transition-colors group"
+              onClick={() => setIsOpen(false)}
+            >
+              <div className="p-2 bg-blue-100 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                {item.icon}
+              </div>
+              <div>
+                <div className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
+                  {item.label}
+                </div>
+                <div className="text-sm text-slate-500">
+                  {item.description}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // GSAP Refs
   const heroContentRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
+
+  // Company dropdown items
+  const companyDropdownItems = [
+    {
+      label: "Giới thiệu",
+      href: "/gioi-thieu",
+      icon: <Building2 className="w-5 h-5" />,
+      description: "Tìm hiểu về Techera",
+    },
+    {
+      label: "Tuyển dụng",
+      href: "/tuyen-dung",
+      icon: <Users className="w-5 h-5" />,
+      description: "Cơ hội nghề nghiệp",
+    },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,13 +201,18 @@ const Header = () => {
             </div>
           </Link>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8 text-md font-medium">
+            <DropdownMenu 
+              label="Công ty" 
+              items={companyDropdownItems}
+              isScrolled={isScrolled}
+            />
             {[
-              { label: "Công ty", href: "#ecosystem" },
-              { label: "Giải pháp", href: "#industries" },
-              { label: "Blog", href: "#features" },
-              { label: "Mạng Lưới", href: "#network" },
-              { label: "Liên hệ", href: "#dashboard" },
+              { label: "Giải pháp", href: "/giai-phap" },
+              { label: "Blog", href: "/blog" },
+              // { label: "Mạng Lưới", href: "/mang-luoi" },
+              { label: "Liên hệ", href: "/lien-he" },
             ].map((item) => (
               <Link
                 key={item.label}
@@ -134,15 +228,65 @@ const Header = () => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <Button variant="primary" className="!py-2 !px-5 text-md cursor-pointer shadow-lg shadow-blue-500/20">
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <div className={`w-6 h-0.5 ${isScrolled ? "bg-slate-800" : "bg-white"} transition-all mb-1.5 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`}></div>
+            <div className={`w-6 h-0.5 ${isScrolled ? "bg-slate-800" : "bg-white"} transition-all ${mobileMenuOpen ? "opacity-0" : ""}`}></div>
+            <div className={`w-6 h-0.5 ${isScrolled ? "bg-slate-800" : "bg-white"} transition-all mt-1.5 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></div>
+          </button>
+
+          <div className="hidden md:flex items-center gap-4">
+            {/* <Button variant="primary" className="!py-2 !px-5 text-md cursor-pointer shadow-lg shadow-blue-500/20">
               Liên Hệ
-            </Button>
+            </Button> */}
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className={`md:hidden absolute top-full left-0 right-0 bg-white shadow-lg transition-all duration-300 ${mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
+          <div className="p-4 space-y-2">
+            <div className="border-b border-gray-100 pb-2 mb-2">
+              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2 px-3">Công ty</div>
+              {companyDropdownItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 text-slate-700"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="p-1.5 bg-blue-100 rounded text-blue-600">
+                    {item.icon}
+                  </div>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+            {[
+              { label: "Giải pháp", href: "#ecosystem" },
+              { label: "Blog", href: "#features" },
+              // { label: "Mạng Lưới", href: "#network" },
+              { label: "Liên hệ", href: "#dashboard" },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="block p-3 rounded-lg hover:bg-blue-50 text-slate-700 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+            {/* <Button variant="primary" className="w-full mt-4">
+              Liên Hệ
+            </Button> */}
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 flex-grow flex items-center justify-center pt-20 pb-20">
+      <div className="relative z-10 flex-grow flex items-center justify-center pt-10 pb-20">
         <div 
           ref={heroContentRef}
           className="max-w-4xl mx-auto text-center px-4"
@@ -152,7 +296,7 @@ const Header = () => {
           }}
         >
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-8 text-white drop-shadow-2xl">
+          <h1 className="text-[28px] md:text-5xl lg:text-6xl font-bold tracking-tight mb-8 text-white drop-shadow-2xl">
             TECHERA: Hệ thống Quản lý <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 via-white to-blue-200 block mt-2">
               & Phân Phối Vé Toàn Diện

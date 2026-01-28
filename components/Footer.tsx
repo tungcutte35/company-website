@@ -6,12 +6,6 @@ import Link from "next/link";
 import Logo from "../public/images/logo.jpg";
 import { MapPin, Mail, Facebook, PhoneCall, FileText } from "lucide-react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register ScrollTrigger
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
@@ -19,62 +13,34 @@ const Footer = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Simple fade-in animation without ScrollTrigger
+    // This ensures Footer always displays reliably
     const ctx = gsap.context(() => {
-      // Animate grid columns with stagger
       if (gridRef.current) {
         const columns = gridRef.current.children;
         gsap.fromTo(
           columns,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 90%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-
-        // Animate links within each column
-        const links = gridRef.current.querySelectorAll("li");
-        gsap.fromTo(
-          links,
-          { opacity: 0, x: -15 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.5,
-            stagger: 0.05,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-
-      // Animate bottom section
-      if (bottomRef.current) {
-        gsap.fromTo(
-          bottomRef.current,
-          { opacity: 0, y: 20 },
+          { opacity: 0, y: 30 },
           {
             opacity: 1,
             y: 0,
             duration: 0.6,
+            stagger: 0.1,
             ease: "power2.out",
-            scrollTrigger: {
-              trigger: bottomRef.current,
-              start: "top 95%",
-              toggleActions: "play none none reverse",
-            },
+            delay: 0.2,
+          }
+        );
+      }
+
+      if (bottomRef.current) {
+        gsap.fromTo(
+          bottomRef.current,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.5,
+            ease: "power2.out",
+            delay: 0.5,
           }
         );
       }
@@ -84,7 +50,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-background border-t border-white/10 pt-16 pb-8">
+    <footer ref={footerRef} className="bg-[#070707] border-t border-white/10 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Main Footer Grid */}
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
@@ -93,7 +59,7 @@ const Footer = () => {
             <Link href="/" className="block mb-6">
               <Image src={Logo} alt="PSYS Logo" width={150} height={50} className="object-contain" />
             </Link>
-            <h3 className="text-white font-bold text-sm mb-4 uppercase tracking-wide">
+            <h3 className="text-slate-400 font-bold text-sm mb-4 uppercase tracking-wide">
               CÔNG TY CỔ PHẦN TECHERA
             </h3>
             <div className="space-y-3 text-sm">

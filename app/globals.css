@@ -30,8 +30,17 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply bg-background text-text-main antialiased;
+  }
+
+  /* Smooth scroll offset for fixed navbar */
+  :target {
+    scroll-margin-top: 80px;
   }
 }
 
