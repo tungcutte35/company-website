@@ -2,8 +2,8 @@
 
 import React, { useRef, useEffect } from "react";
 import Section from "./ui/Section";
-import { TicketCheck, Users } from "lucide-react";
-import Image from "next/image";
+import { TicketCheck, Users, LucideIcon } from "lucide-react";
+import Image, { StaticImageData } from "next/image";
 import Vinpearl from "../public/images/logo-vinpearl.png";
 import Sunworld from "../public/images/logo-sunworld.png";
 import Vinwonder from "../public/images/logo-vinwonder.png";
@@ -23,7 +23,7 @@ const SupplierCard = ({
   refCallback,
   className = ""
 }: { 
-  image: any; 
+  image: StaticImageData; 
   alt: string; 
   name: string; 
   refCallback?: (el: HTMLDivElement | null) => void;
@@ -57,7 +57,7 @@ const BottomNode = ({
   refCallback,
   className = ""
 }: { 
-  icon: unknown; 
+  icon: LucideIcon; 
   name: string; 
   label: string; 
   color: "green" | "orange";
