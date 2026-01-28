@@ -1,13 +1,13 @@
 import React from "react";
-import Section from "@/components/ui/Section";
+// import Section from "@/components/ui/Section";
 import Header from "@/components/Header";
 import TrustSignals from "@/components/TrustSignals";
-import Industries from "@/components/Industries";
+// import Industries from "@/components/Industries";
 import Features from "@/components/Features"; 
 import Ecosystem from "@/components/Ecosystem";
 import AgentNetwork from "@/components/AgentNetwork";
 import PermissionMatrix from "@/components/PermissionMatrix";
-import DashboardPreview from "@/components/DashboardPreview";
+// import DashboardPreview from "@/components/DashboardPreview";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -20,9 +20,6 @@ export default function Home() {
       <Features />
       <AgentNetwork />
       <PermissionMatrix />
-      
-      
-
       <Footer />
     </div>
   );

@@ -1,17 +1,146 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useEffect } from "react";
 import Section from "./ui/Section";
 import { Building2, TicketCheck, Users } from "lucide-react";
 import Image from "next/image";
-import Vinpearl from "../public/images/logo-vinpearl.png"
-import Sunworld from "../public/images/logo-sunworld.png"
-import Vinwonder from "../public/images/logo-vinwonder.png"
+import Vinpearl from "../public/images/logo-vinpearl.png";
+import Sunworld from "../public/images/logo-sunworld.png";
+import Vinwonder from "../public/images/logo-vinwonder.png";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 const Ecosystem = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const centerRef = useRef<HTMLDivElement>(null);
+  const supplierRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const bottomRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate header
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current.children,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // Animate center TECHERA logo with scale and rotation
+      if (centerRef.current) {
+        gsap.fromTo(
+          centerRef.current,
+          { opacity: 0, scale: 0, rotation: -180 },
+          {
+            opacity: 1,
+            scale: 1,
+            rotation: 0,
+            duration: 1.2,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: centerRef.current,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // Animate suppliers from top
+      supplierRefs.current.forEach((ref, index) => {
+        if (ref) {
+          gsap.fromTo(
+            ref,
+            { opacity: 0, y: -80, scale: 0.8 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.8,
+              delay: index * 0.15,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ref,
+                start: "top 90%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
+      });
+
+      // Animate bottom nodes from bottom
+      bottomRefs.current.forEach((ref, index) => {
+        if (ref) {
+          gsap.fromTo(
+            ref,
+            { opacity: 0, y: 80, scale: 0.8 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.8,
+              delay: index * 0.2,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: ref,
+                start: "top 95%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
+      });
+
+      // Animate SVG paths
+      const paths = sectionRef.current?.querySelectorAll("svg path");
+      if (paths) {
+        gsap.fromTo(
+          paths,
+          { opacity: 0, strokeDashoffset: 100 },
+          {
+            opacity: 1,
+            strokeDashoffset: 0,
+            duration: 1.5,
+            stagger: 0.1,
+            ease: "power2.inOut",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 60%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <Section id="ecosystem" className="relative py-24 overflow-hidden">
+    <Section ref={sectionRef} id="ecosystem" className="relative py-24 overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-3xl -z-10 animate-pulse "></div>
 
-      <div className="text-center mb-40 relative z-10">
+      <div ref={headerRef} className="text-center mb-40 relative z-10">
         <h2 className="text-3xl  md:text-5xl font-bold mb-4 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-white to-purple-400">
           Tổng quan Hệ sinh thái Techera
         </h2>
@@ -70,7 +199,7 @@ const Ecosystem = () => {
               markerEnd="url(#arrow)"
             />
             <path
-              d="M 590 0 L 399.9 140"
+              d="M 630 0 L 399.9 140"
               stroke="url(#lineGradient)"
               strokeWidth="1"
               strokeDasharray="6 6"
@@ -113,7 +242,7 @@ const Ecosystem = () => {
           
         </svg>
 
-        <div className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+        <div ref={centerRef} className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
           <div className="relative flex items-center justify-center w-48 h-48">
             <div className="absolute inset-0 rounded-full border border-blue-500/30 border-t-blue-400 animate-[spin_10s_linear_infinite]"></div>
             <div className="absolute inset-4 rounded-full border border-purple-500/30 border-b-purple-400 animate-[spin_15s_linear_infinite_reverse]"></div>
@@ -132,7 +261,10 @@ const Ecosystem = () => {
           </div>
         </div>
 
-        <div className="absolute mb-20 -top-1/10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300">
+        <div 
+          ref={(el) => { supplierRefs.current[0] = el; }}
+          className="absolute mb-20 -top-1/10 left-[45%] -translate-x-1/2 z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300"
+        >
           <div className="w-24 h-24 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-blue-500/30 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_40px_rgba(59,130,246,0.4)] transition-all duration-300 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
            <Image src={Sunworld} alt="Sunworld" width={150} height={150} className="px-1" />
@@ -147,7 +279,10 @@ const Ecosystem = () => {
           </div>
         </div>
 
-        <div className="absolute mb-20 -top-1/10 left-1/4 -translate-x-1/2 z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300">
+        <div 
+          ref={(el) => { supplierRefs.current[1] = el; }}
+          className="absolute mb-20 -top-1/10 left-[20%] -translate-x-1/2 z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300"
+        >
           <div className="w-24 h-24 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-blue-500/30 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_40px_rgba(59,130,246,0.4)] transition-all duration-300 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
            <Image src={Vinpearl} alt="Vinpearl" width={150} height={150} />
@@ -162,14 +297,17 @@ const Ecosystem = () => {
           </div>
         </div>
 
-        <div className="absolute mb-20 -top-1/10 right-1/6 -translate-x-1/2 z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300">
+        <div 
+          ref={(el) => { supplierRefs.current[2] = el; }}
+          className="absolute mb-20 -top-1/10 right-1/6 -translate-x-1/2 z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300"
+        >
           <div className="w-24 h-24 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-blue-500/30 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.2)] group-hover:shadow-[0_0_40px_rgba(59,130,246,0.4)] transition-all duration-300 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
            <Image src={Vinwonder} alt="Vinwonder" width={150} height={150}  />
           </div>
           <div className="mt-3 text-center">
             <h3 className="text-white font-bold text-lg group-hover:text-blue-400 transition-colors">
-              ZALOPAY
+              VINWONDER
             </h3>
             <span className="text-xs text-slate-200  bg-slate-800 px-2 py-1 rounded-full border border-slate-700">
               Suppliers
@@ -177,7 +315,10 @@ const Ecosystem = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-[5%] md:left-[20%] z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300">
+        <div 
+          ref={(el) => { bottomRefs.current[0] = el; }}
+          className="absolute bottom-0 left-[5%] md:left-[20%] z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300"
+        >
           <div className="w-24 h-24 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-green-500/30 flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.2)] group-hover:shadow-[0_0_40px_rgba(34,197,94,0.4)] transition-all duration-300 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <Users className="w-10 h-10 text-green-400" />
@@ -192,7 +333,10 @@ const Ecosystem = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 right-[5%] md:right-[20%] z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300">
+        <div 
+          ref={(el) => { bottomRefs.current[1] = el; }}
+          className="absolute bottom-0 right-[5%] md:right-[20%] z-20 flex flex-col items-center group cursor-pointer hover:scale-105 transition-transform duration-300"
+        >
           <div className="w-24 h-24 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-orange-500/30 flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.2)] group-hover:shadow-[0_0_40px_rgba(249,115,22,0.4)] transition-all duration-300 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <TicketCheck className="w-10 h-10 text-orange-400" />

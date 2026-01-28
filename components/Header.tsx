@@ -1,16 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "./ui/Button";
 import HeroBg from "@/public/images/hero-img.webp";
 import Logo from "@/public/images/logo.jpg";
 import { ArrowDown } from "lucide-react";
+import gsap from "gsap";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  
+  // GSAP Refs
+  const heroContentRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +30,51 @@ const Header = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // GSAP Hero Animation
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Timeline for hero content
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+      // Animate navigation
+      if (navRef.current) {
+        gsap.set(navRef.current, { opacity: 0, y: -30 });
+        tl.to(navRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+        }, 0);
+      }
+
+      // Animate hero content children
+      if (heroContentRef.current) {
+        const children = heroContentRef.current.children;
+        gsap.set(children, { opacity: 0, y: 60, scale: 0.98 });
+        
+        tl.to(children, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+        }, 0.3);
+      }
+
+      // Animate arrow with delay
+      if (arrowRef.current) {
+        gsap.set(arrowRef.current, { opacity: 0, y: -20 });
+        tl.to(arrowRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+        }, 1.2);
+      }
+    });
+
+    return () => ctx.revert();
   }, []);
 
  
@@ -47,6 +98,7 @@ const Header = () => {
       </div>
 
       <div 
+        ref={navRef}
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled 
             ? "bg-white shadow-lg py-2 border-b border-gray-100" 
@@ -92,12 +144,14 @@ const Header = () => {
 
       <div className="relative z-10 flex-grow flex items-center justify-center pt-20 pb-20">
         <div 
+          ref={heroContentRef}
           className="max-w-4xl mx-auto text-center px-4"
           style={{ 
             opacity: Math.max(0, 1 - scrollY / 500),
             transform: `translate3d(0, ${scrollY * 0.2}px, 0)`
           }}
         >
+          
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-8 text-white drop-shadow-2xl">
             TECHERA: Hệ thống Quản lý <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 via-white to-blue-200 block mt-2">
@@ -120,6 +174,7 @@ const Header = () => {
       </div>
       
       <div 
+         ref={arrowRef}
          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 animate-bounce text-white/50"
          style={{ opacity: Math.max(0, 1 - scrollY / 150) }}
       >
