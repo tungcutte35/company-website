@@ -289,7 +289,7 @@ export default function SolutionsPage() {
         <div className="max-w-7xl mx-auto">
           <div ref={solutionsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {solutions.map((solution, index) => (
-              <SolutionCard key={index} {...solution} />
+              <SolutionCard href={""} key={index} {...solution} />
             ))}
           </div>
         </div>
