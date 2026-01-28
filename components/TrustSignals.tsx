@@ -28,7 +28,7 @@ const TrustSignals = () => {
             scrollTrigger: {
               trigger: titleRef.current,
               start: "top 90%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -47,7 +47,7 @@ const TrustSignals = () => {
             scrollTrigger: {
               trigger: containerRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -93,3 +93,4 @@ const TrustSignals = () => {
 };
 
 export default TrustSignals;
+

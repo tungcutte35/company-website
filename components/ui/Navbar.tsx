@@ -207,9 +207,11 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
               {item.label}
             </Link>
           ))}
-          <Button variant="primary" className="w-full mt-4">
-            Liên Hệ
-          </Button>
+          <Link href="/lien-he" onClick={() => setMobileMenuOpen(false)}>
+            <Button variant="primary" className="w-full mt-4">
+              Liên Hệ
+            </Button>
+          </Link>
         </div>
       </div>
     </>
@@ -217,3 +219,4 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
 };
 
 export default Navbar;
+

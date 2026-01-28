@@ -265,10 +265,10 @@ const Header = () => {
               ))}
             </div>
             {[
-              { label: "Giải pháp", href: "#ecosystem" },
-              { label: "Blog", href: "#features" },
-              // { label: "Mạng Lưới", href: "#network" },
-              { label: "Liên hệ", href: "#dashboard" },
+              { label: "Giải pháp", href: "/giai-phap" },
+              { label: "Blog", href: "/blog" },
+              // { label: "Mạng Lưới", href: "/mang-luoi" },
+              { label: "Liên hệ", href: "/lien-he" },
             ].map((item) => (
               <Link
                 key={item.label}
@@ -307,12 +307,16 @@ const Header = () => {
             bán vé đa kênh và kiểm soát dữ liệu theo thời gian thực — tất cả trong một hệ thống duy nhất.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-             <Button variant="primary" className="cursor-pointer shadow-xl shadow-blue-600/20 hover:shadow-blue-600/40 transform hover:-translate-y-0.5 transition-all text-base px-8 py-4">
-              Xem Giới Thiệu TECHERA
-            </Button>
-            <Button variant="secondary" className="cursor-pointer backdrop-blur-md bg-white/10 hover:bg-white/20 border-white/20 text-white text-base px-8 py-4">
-              Tiêu Chuẩn Mới Cho Quản Lý Vé
-            </Button>
+            <Link href="/gioi-thieu">
+              <Button variant="primary" className="cursor-pointer shadow-xl shadow-blue-600/20 hover:shadow-blue-600/40 transform hover:-translate-y-0.5 transition-all text-base px-8 py-4">
+                Xem Giới Thiệu TECHERA
+              </Button>
+            </Link>
+            <Link href="/giai-phap">
+              <Button variant="secondary" className="cursor-pointer backdrop-blur-md bg-white/10 hover:bg-white/20 border-white/20 text-white text-base px-8 py-4">
+                Khám Phá Giải Pháp
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -329,3 +333,4 @@ const Header = () => {
 };
 
 export default Header;
+

@@ -70,7 +70,7 @@ const AgentNetwork = () => {
             scrollTrigger: {
               trigger: headerRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -90,7 +90,7 @@ const AgentNetwork = () => {
             scrollTrigger: {
               trigger: networkCardRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -109,7 +109,7 @@ const AgentNetwork = () => {
             scrollTrigger: {
               trigger: kolCardRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -128,7 +128,7 @@ const AgentNetwork = () => {
             scrollTrigger: {
               trigger: centralCircleRef.current,
               start: "top 80%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -150,7 +150,7 @@ const AgentNetwork = () => {
               scrollTrigger: {
                 trigger: kolCardRef.current,
                 start: "top 70%",
-                toggleActions: "play none none reverse",
+                toggleActions: "play none none none",
               },
             }
           );
@@ -294,3 +294,4 @@ const AgentNetwork = () => {
 };
 
 export default AgentNetwork;
+

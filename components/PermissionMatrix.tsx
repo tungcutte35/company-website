@@ -42,7 +42,7 @@ const PermissionMatrix = () => {
             scrollTrigger: {
               trigger: containerRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -62,7 +62,7 @@ const PermissionMatrix = () => {
             scrollTrigger: {
               trigger: titleRef.current,
               start: "top 90%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -83,7 +83,7 @@ const PermissionMatrix = () => {
             scrollTrigger: {
               trigger: tableRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -102,7 +102,7 @@ const PermissionMatrix = () => {
             scrollTrigger: {
               trigger: tableRef.current,
               start: "top 80%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -121,7 +121,7 @@ const PermissionMatrix = () => {
             scrollTrigger: {
               trigger: tableRef.current,
               start: "top 75%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -184,3 +184,4 @@ const PermissionMatrix = () => {
 };
 
 export default PermissionMatrix;
+

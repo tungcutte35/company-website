@@ -90,21 +90,26 @@ const Footer = () => {
               Thông tin công ty
             </h4>
             <ul className="space-y-3">
-              {[
-                "Giới thiệu",
-                "Tại sao chọn Teachera?",
-                "Văn hóa Teachera",
-                "Quy trình làm việc của Teachera",
-              ].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/gioi-thieu" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Giới thiệu
+                </Link>
+              </li>
+              <li>
+                <Link href="/giai-phap" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Tại sao chọn Techera?
+                </Link>
+              </li>
+              <li>
+                <Link href="/gioi-thieu" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Văn hóa Techera
+                </Link>
+              </li>
+              <li>
+                <Link href="/tuyen-dung" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Tuyển dụng
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -114,21 +119,16 @@ const Footer = () => {
               Giải pháp & Dịch vụ
             </h4>
             <ul className="space-y-3">
-              {[
-                "Giải pháp công nghệ",
-                
-                "Giải pháp bảo mật & an toàn thông tin",
-                
-              ].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/giai-phap" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Giải pháp công nghệ
+                </Link>
+              </li>
+              <li>
+                <Link href="/giai-phap" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Giải pháp bảo mật & an toàn thông tin
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -138,20 +138,21 @@ const Footer = () => {
               Dịch vụ khách hàng
             </h4>
             <ul className="space-y-3">
-              {[
-                "Giới thiệu",
-                "Chính sách bảo mật",
-                "Liên hệ",
-              ].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/gioi-thieu" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Giới thiệu
+                </Link>
+              </li>
+              <li>
+                <Link href="/lien-he" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Chính sách bảo mật
+                </Link>
+              </li>
+              <li>
+                <Link href="/lien-he" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Liên hệ
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -171,3 +172,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

@@ -106,7 +106,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: headerRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -126,7 +126,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: offlineCardRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -145,7 +145,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: offlineCardRef.current,
               start: "top 75%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -165,7 +165,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: onlineCardRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -184,7 +184,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: onlineCardRef.current,
               start: "top 75%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -204,7 +204,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: comparisonRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -223,7 +223,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: comparisonRef.current,
               start: "top 70%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -243,7 +243,7 @@ const Features = () => {
             scrollTrigger: {
               trigger: benefits[0],
               start: "top 90%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -412,3 +412,4 @@ const Features = () => {
 };
 
 export default Features;
+

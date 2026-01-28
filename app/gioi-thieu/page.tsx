@@ -190,7 +190,7 @@ export default function AboutPage() {
             scrollTrigger: {
               trigger: statsRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -210,7 +210,7 @@ export default function AboutPage() {
             scrollTrigger: {
               trigger: valuesRef.current,
               start: "top 80%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -249,10 +249,12 @@ export default function AboutPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 ">
-            <Button variant="primary" className="px-6 py-4 flex items-center gap-2 cursor-pointer">
-              Tìm hiểu thêm
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <Link href="/giai-phap">
+              <Button variant="primary" className="px-6 py-4 flex items-center gap-2 cursor-pointer">
+                Tìm hiểu thêm
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
             <Link href="/tuyen-dung">
               <Button variant="secondary" className="px-8 py-3 cursor-pointer">
                 Gia nhập đội ngũ
@@ -448,14 +450,16 @@ export default function AboutPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button
-                  className="px-8 py-3 rounded-xl
-                     text-gray-800 font-semibold
-                    hover:bg-white/90 hover:text-gray-900
-                    shadow-lg shadow-cyan-500/20 cursor-pointer"
-                >
-                  Liên hệ tư vấn
-                </Button>
+                <Link href="/lien-he">
+                  <Button
+                    className="px-8 py-3 rounded-xl
+                       text-gray-800 font-semibold
+                      hover:bg-white/90 hover:text-gray-900
+                      shadow-lg shadow-cyan-500/20 cursor-pointer"
+                  >
+                    Liên hệ tư vấn
+                  </Button>
+                </Link>
 
                 <Link href="/tuyen-dung">
                   <Button

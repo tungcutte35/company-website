@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Section from "./ui/Section";
 import Button from "./ui/Button";
 import { ArrowRight } from "lucide-react";
@@ -60,12 +61,15 @@ const Industries = () => {
       </div>
 
       <div className="text-center mt-12">
-        <Button variant="secondary" className="text-sm px-8">
-          Xem Tất Cả Giải Pháp
-        </Button>
+        <Link href="/giai-phap">
+          <Button variant="secondary" className="text-sm px-8">
+            Xem Tất Cả Giải Pháp
+          </Button>
+        </Link>
       </div>
     </Section>
   );
 };
 
 export default Industries;
+

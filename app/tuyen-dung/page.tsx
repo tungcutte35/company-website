@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 import { 
   MapPin, 
   Clock, 
@@ -220,7 +221,7 @@ export default function CareersPage() {
             scrollTrigger: {
               trigger: benefitsRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -240,7 +241,7 @@ export default function CareersPage() {
             scrollTrigger: {
               trigger: jobsRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -452,19 +453,21 @@ export default function CareersPage() {
                 và sẽ liên hệ khi có vị trí phù hợp.
               </p>
 
-              <Button
-                className="
-                  inline-flex items-center gap-2
-                  px-8 py-3 rounded-xl
-                   text-slate-900 font-semibold
-                  hover:bg-white/90 hover:text-gray-900
-                  shadow-lg shadow-cyan-500/20
-                  cursor-pointer
-                "
-              >
-                Gửi CV ngay
-                <ArrowRight className="w-4 h-4" />
-              </Button>
+              <Link href="/lien-he">
+                <Button
+                  className="
+                    inline-flex items-center gap-2
+                    px-8 py-3 rounded-xl
+                     text-slate-900 font-semibold
+                    hover:bg-white/90 hover:text-gray-900
+                    shadow-lg shadow-cyan-500/20
+                    cursor-pointer
+                  "
+                >
+                  Gửi CV ngay
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

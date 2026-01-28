@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,6 +11,9 @@ if (typeof window !== "undefined") {
 }
 
 export default function SmoothScroll() {
+  const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -19,6 +23,8 @@ export default function SmoothScroll() {
       smoothWheel: true,
       touchMultiplier: 2,
     });
+
+    lenisRef.current = lenis;
 
     // Integrate Lenis with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
@@ -36,6 +42,15 @@ export default function SmoothScroll() {
       });
     };
   }, []);
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+    // Also use native scroll as fallback
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return null;
 }

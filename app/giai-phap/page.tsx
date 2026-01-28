@@ -118,12 +118,12 @@ const SolutionCard = ({
         ))}
       </ul>
       
-      <Link href={href}>
+      {/* <Link href={href}> */}
         <Button variant="secondary" className="w-full justify-center cursor-pointer flex gap-1 items-center">
           Tìm hiểu thêm
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
-      </Link>
+      {/* </Link> */}
     </div>
   </div>
 );
@@ -155,7 +155,7 @@ export default function SolutionsPage() {
             scrollTrigger: {
               trigger: solutionsRef.current,
               start: "top 80%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -177,7 +177,7 @@ export default function SolutionsPage() {
         "Báo cáo doanh thu real-time"
       ],
       color: "from-blue-500/10 to-transparent",
-      href: "/giai-phap/ve-du-lich"
+      // href: "/giai-phap/ve-du-lich"
     },
     {
       icon: Store,
@@ -190,7 +190,7 @@ export default function SolutionsPage() {
         "Dashboard riêng cho từng đại lý"
       ],
       color: "from-purple-500/10 to-transparent",
-      href: "/giai-phap/mang-luoi-dai-ly"
+      // href: "/giai-phap/mang-luoi-dai-ly"
     },
     {
       icon: Users,
@@ -203,7 +203,7 @@ export default function SolutionsPage() {
         "Quản lý nhiều chiến dịch"
       ],
       color: "from-pink-500/10 to-transparent",
-      href: "/giai-phap/kol-affiliate"
+      // href: "/giai-phap/kol-affiliate"
     },
     {
       icon: BarChart3,
@@ -216,7 +216,7 @@ export default function SolutionsPage() {
         "Export báo cáo đa định dạng"
       ],
       color: "from-green-500/10 to-transparent",
-      href: "/giai-phap/phan-tich"
+      // href: "/giai-phap/phan-tich"
     },
     {
       icon: Shield,
@@ -229,7 +229,7 @@ export default function SolutionsPage() {
         "Mã hóa dữ liệu end-to-end"
       ],
       color: "from-orange-500/10 to-transparent",
-      href: "/giai-phap/bao-mat"
+      // href: "/giai-phap/bao-mat"
     },
     {
       icon: Globe,
@@ -242,7 +242,7 @@ export default function SolutionsPage() {
         "Sandbox testing environment"
       ],
       color: "from-cyan-500/10 to-transparent",
-      href: "/giai-phap/api-tich-hop"
+      // href: "/giai-phap/api-tich-hop"
     },
   ];
 

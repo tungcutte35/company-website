@@ -130,7 +130,7 @@ const Ecosystem = () => {
             scrollTrigger: {
               trigger: headerRef.current,
               start: "top 85%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -150,7 +150,7 @@ const Ecosystem = () => {
             scrollTrigger: {
               trigger: centerRef.current,
               start: "top 80%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -172,7 +172,7 @@ const Ecosystem = () => {
               scrollTrigger: {
                 trigger: ref,
                 start: "top 75%",
-                toggleActions: "play none none reverse",
+                toggleActions: "play none none none",
               },
             }
           );
@@ -195,7 +195,7 @@ const Ecosystem = () => {
               scrollTrigger: {
                 trigger: ref,
                 start: "top 65%",
-                toggleActions: "play none none reverse",
+                toggleActions: "play none none none",
               },
             }
           );
@@ -217,7 +217,7 @@ const Ecosystem = () => {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 60%",
-              toggleActions: "play none none reverse",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -424,3 +424,4 @@ const Ecosystem = () => {
 };
 
 export default Ecosystem;
+

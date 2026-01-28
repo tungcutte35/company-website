@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Section from "./ui/Section";
 import Button from "./ui/Button";
 import { ChevronRight } from "lucide-react";
@@ -49,13 +50,13 @@ const Solutions = () => {
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed min-h-[60px]">
                   {prod.desc}
                 </p>
-                <a
-                  href="#"
+                <Link
+                  href="/giai-phap"
                   className="text-blue-600 text-sm font-bold hover:text-blue-700 inline-flex items-center gap-1 transition-all hover:gap-2 mb-8"
                 >
-                  Read More{" "}
+                  Xem thêm{" "}
                   <ChevronRight className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
 
               {/* Product on Pedestal */}
@@ -80,7 +81,9 @@ const Solutions = () => {
         </div>
 
         <div className="text-center mt-16">
-          <Button variant="primary">Explore All Products</Button>
+          <Link href="/giai-phap">
+            <Button variant="primary">Khám Phá Tất Cả Giải Pháp</Button>
+          </Link>
         </div>
       </Section>
     </div>
@@ -88,3 +91,4 @@ const Solutions = () => {
 };
 
 export default Solutions;
+
