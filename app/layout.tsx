@@ -12,6 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Chỉ cho phép indexing trên production domain
+const isProduction = process.env.VERCEL_ENV === 'production';
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
@@ -21,6 +24,21 @@ export const metadata: Metadata = {
   description:
     "TECHERA là nền tảng công nghệ cung cấp giải pháp quản lý, phân phối và bán vé thông minh cho khu du lịch, sự kiện và doanh nghiệp. Tối ưu vận hành, mở rộng mạng lưới đại lý và tăng trưởng doanh thu.",
   applicationName: "TECHERA",
+  // Chặn indexing trên preview/development
+  robots: isProduction ? {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  } : {
+    index: false,
+    follow: false,
+  },
   alternates: {
     canonical: "/",
   },
