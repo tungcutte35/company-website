@@ -5,7 +5,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env.local') });
 
 console.log('🔧 Setting up database...');
-console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Found' : 'Not found');
+console.log('NEXT_PUBLIC_DATABASE_URL:', process.env.NEXT_PUBLIC_DATABASE_URL ? 'Found' : 'Not found');
 
 try {
   console.log('📦 Generating Prisma Client...');
