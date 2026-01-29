@@ -13,7 +13,8 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "db:test": "node scripts/test-db-connection.js"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
