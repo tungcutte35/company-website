@@ -2,7 +2,25 @@
 
 ## Issues Fixed
 
-### 1. Blog Admin Page (`app/admin/(dashboard)/blog/page.tsx`)
+### 1. Prisma Client Generation Error
+**Problem**: Prisma Client wasn't being generated before the build, causing initialization errors
+
+**Fix**: Updated build scripts in `package.json`:
+```json
+{
+  "scripts": {
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate"
+  }
+}
+```
+
+This ensures:
+- Prisma Client is generated before every build
+- Prisma Client is generated after `npm install` (important for Vercel/deployment)
+- No more "outdated Prisma Client" errors
+
+### 2. Blog Admin Page (`app/admin/(dashboard)/blog/page.tsx`)
 **Problem**: Image upload result returned `url?: string` but FormData expected `image: string`
 
 **Fix**: Added null coalescing operator to handle undefined values:
@@ -66,8 +84,33 @@ setSubmitError(data.errors ? data.errors.join(', ') : (data.error || 'Có lỗi 
 
 ✅ **Build Successful**
 - All TypeScript errors resolved
-- Production build completes without errors
-- All routes compiled successfully
+- Prisma Client generation automated
+- Production build completes without errors or warnings
+- All routes compiled successfully (31 routes)
+
+## Configuration Updates
+
+### Next.js Config (`next.config.ts`)
+Updated deprecated `images.domains` to `images.remotePatterns`:
+```typescript
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'placehold.co',
+    },
+  ],
+}
+```
+
+### Package.json Scripts
+Added automatic Prisma Client generation:
+```json
+{
+  "build": "prisma generate && next build",
+  "postinstall": "prisma generate"
+}
+```
 
 ## Remaining Warnings
 
@@ -83,9 +126,9 @@ The following warnings are non-critical and don't prevent the build:
    - Impact: None (intentional to prevent infinite loops)
    - Current implementation uses `useRef` to prevent duplicate fetches
 
-3. **Deprecated Config**: `images.domains` deprecated in favor of `images.remotePatterns`
-   - Location: `next.config.ts`
-   - Impact: None currently, but should be updated for future Next.js versions
+3. ~~**Deprecated Config**: `images.domains` deprecated in favor of `images.remotePatterns`~~ ✅ **FIXED**
+   - ~~Location: `next.config.ts`~~
+   - ~~Impact: None currently, but should be updated for future Next.js versions~~
 
 ## Type Safety Improvements
 
@@ -103,3 +146,23 @@ All API response types are now properly typed:
 - ✅ Check all admin CRUD operations
 - ✅ Test newsletter subscription flow
 - ✅ Verify contact form submission
+
+## Deployment Notes
+
+### Vercel/Production Deployment
+The `postinstall` script ensures Prisma Client is generated automatically after dependencies are installed. This is crucial for:
+- Vercel deployments (which cache dependencies)
+- CI/CD pipelines
+- Fresh installations
+
+### Environment Variables
+Make sure these are set in production:
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXT_PUBLIC_SITE_URL` - Your production URL
+
+### Build Command
+The build command now includes Prisma generation:
+```bash
+npm run build
+# Runs: prisma generate && next build
+```
