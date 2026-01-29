@@ -4,7 +4,7 @@
  * Usage:
  *   node scripts/test-db-connection.js
  * 
- * This script tests if the NEXT_PUBLIC_DATABASE_URL is valid and can connect to the database
+ * This script tests if the DATABASE_URL is valid and can connect to the database
  */
 
 const { PrismaClient } = require('@prisma/client');
@@ -12,20 +12,20 @@ const { PrismaClient } = require('@prisma/client');
 async function testConnection() {
   console.log('🔍 Testing database connection...\n');
   
-  // Check if NEXT_PUBLIC_DATABASE_URL is set
-  if (!process.env.NEXT_PUBLIC_DATABASE_URL) {
-    console.error('❌ ERROR: NEXT_PUBLIC_DATABASE_URL is not set in environment variables');
+  // Check if DATABASE_URL is set
+  if (!process.env.DATABASE_URL) {
+    console.error('❌ ERROR: DATABASE_URL is not set in environment variables');
     console.log('\n💡 Solution:');
     console.log('   1. Create .env.local file');
-    console.log('   2. Add: NEXT_PUBLIC_DATABASE_URL="postgresql://..."');
+    console.log('   2. Add: DATABASE_URL="postgresql://..."');
     console.log('   3. Run this script again\n');
     process.exit(1);
   }
   
-  console.log('✅ NEXT_PUBLIC_DATABASE_URL is set');
+  console.log('✅ DATABASE_URL is set');
   
   // Mask password in URL for display
-  const maskedUrl = process.env.NEXT_PUBLIC_DATABASE_URL.replace(
+  const maskedUrl = process.env.DATABASE_URL.replace(
     /:([^:@]+)@/,
     ':****@'
   );
@@ -167,7 +167,7 @@ async function testConnection() {
       console.error('   1. Add ?sslmode=require to connection string');
       console.error('   2. Or add ?sslmode=disable for local development\n');
     } else {
-      console.error('   Check your NEXT_PUBLIC_DATABASE_URL format:');
+      console.error('   Check your DATABASE_URL format:');
       console.error('   postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public\n');
     }
     
