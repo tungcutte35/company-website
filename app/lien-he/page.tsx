@@ -16,6 +16,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/ui/Navbar";
 import Button from "@/components/ui/Button";
 import Footer from "@/components/Footer";
+import { fetchJsonCached } from "@/lib/clientFetch";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -66,23 +67,51 @@ export default function ContactPage() {
     });
   };
 
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError(null);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      company: "",
-      subject: "",
-      message: ""
-    });
+    try {
+      const data = await fetchJsonCached<{ success: boolean; data?: any; error?: string; errors?: string[] }>(
+        "/api/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            company: formData.company,
+            service: formData.subject,
+            message: formData.message,
+          }),
+        }
+      );
+      
+      if (!data.success) {
+        setSubmitError(data.errors ? data.errors.join(', ') : data.error);
+        return;
+      }
+      
+      setIsSubmitted(true);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        subject: "",
+        message: ""
+      });
+    } catch {
+      setSubmitError('Có lỗi xảy ra, vui lòng thử lại sau');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -283,6 +312,12 @@ export default function ContactPage() {
                         placeholder="Mô tả nhu cầu của bạn..."
                       />
                     </div>
+
+                    {submitError && (
+                      <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                        {submitError}
+                      </div>
+                    )}
 
                     <Button 
                       type="submit"

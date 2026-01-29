@@ -43,8 +43,8 @@ const DropdownMenu = ({
       <button
         className={`flex items-center gap-1 transition-colors font-semibold ${
           isScrolled 
-            ? "text-slate-600 hover:text-blue-600" 
-            : "text-slate-200 hover:text-blue-400 drop-shadow-sm"
+            ? "text-gray-700 hover:text-blue-600" 
+            : "text-gray-700 hover:text-blue-600"
         }`}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -191,7 +191,7 @@ const Header = () => {
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled 
             ? "bg-white shadow-lg py-2 border-b border-gray-100" 
-            : "bg-transparent border-b border-white/10 py-5"
+            : "bg-white shadow-lg py-2 border-b border-gray-100"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-10 flex items-center justify-between">
@@ -206,22 +206,18 @@ const Header = () => {
             <DropdownMenu 
               label="Công ty" 
               items={companyDropdownItems}
-              isScrolled={isScrolled}
+              isScrolled={true}
             />
             {[
               { label: "Giải pháp", href: "/giai-phap" },
               { label: "Blog", href: "/blog" },
-              // { label: "Mạng Lưới", href: "/mang-luoi" },
+              { label: "FAQ", href: "/faq" },
               { label: "Liên hệ", href: "/lien-he" },
             ].map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`transition-colors font-semibold ${
-                  isScrolled 
-                    ? "text-slate-600 hover:text-blue-600" 
-                    : "text-slate-200 hover:text-blue-400 drop-shadow-sm"
-                }`}
+                className="transition-colors font-semibold text-gray-700 hover:text-blue-600"
               >
                 {item.label}
               </Link>
@@ -233,9 +229,9 @@ const Header = () => {
             className="md:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <div className={`w-6 h-0.5 ${isScrolled ? "bg-slate-800" : "bg-white"} transition-all mb-1.5 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`}></div>
-            <div className={`w-6 h-0.5 ${isScrolled ? "bg-slate-800" : "bg-white"} transition-all ${mobileMenuOpen ? "opacity-0" : ""}`}></div>
-            <div className={`w-6 h-0.5 ${isScrolled ? "bg-slate-800" : "bg-white"} transition-all mt-1.5 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></div>
+            <div className={`w-6 h-0.5 bg-gray-800 transition-all mb-1.5 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`}></div>
+            <div className={`w-6 h-0.5 bg-gray-800 transition-all ${mobileMenuOpen ? "opacity-0" : ""}`}></div>
+            <div className={`w-6 h-0.5 bg-gray-800 transition-all mt-1.5 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></div>
           </button>
 
           <div className="hidden md:flex items-center gap-4">
@@ -249,12 +245,12 @@ const Header = () => {
         <div className={`md:hidden absolute top-full left-0 right-0 bg-white shadow-lg transition-all duration-300 ${mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
           <div className="p-4 space-y-2">
             <div className="border-b border-gray-100 pb-2 mb-2">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-2 px-3">Công ty</div>
+              <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 px-3">Công ty</div>
               {companyDropdownItems.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 text-slate-700"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <div className="p-1.5 bg-blue-100 rounded text-blue-600">
@@ -267,13 +263,13 @@ const Header = () => {
             {[
               { label: "Giải pháp", href: "/giai-phap" },
               { label: "Blog", href: "/blog" },
-              // { label: "Mạng Lưới", href: "/mang-luoi" },
+              { label: "FAQ", href: "/faq" },
               { label: "Liên hệ", href: "/lien-he" },
             ].map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="block p-3 rounded-lg hover:bg-blue-50 text-slate-700 font-medium"
+                className="block p-3 rounded-lg hover:bg-blue-50 text-gray-700 font-medium hover:text-blue-600"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.label}

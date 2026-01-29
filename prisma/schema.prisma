@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BlogPost {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String
+  image       String?
+  category    String
+  author      String
+  authorAvatar String?
+  date        DateTime @default(now())
+  readTime    String
+  featured    Boolean  @default(false)
+  tags        String[] // Array of strings
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_posts")
+}
+
+model FAQ {
+  id        Int      @id @default(autoincrement())
+  category  String
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+model Career {
+  id              Int      @id @default(autoincrement())
+  slug            String   @unique
+  title           String
+  department      String
+  location        String
+  type            String
+  level           String
+  salary          String
+  description     String
+  responsibilities String[] // Array of strings
+  requirements    String[] // Array of strings
+  benefits        String[] // Array of strings
+  posted          DateTime @default(now())
+  deadline        DateTime?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  applications    JobApplication[]
+
+  @@map("careers")
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  company   String?
+  service   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_messages")
+}
+
+model Newsletter {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  active       Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("newsletters")
+}
+
+model JobApplication {
+  id          Int      @id @default(autoincrement())
+  jobId       Int
+  name        String
+  email       String
+  phone       String
+  resume      String   // URL or file path
+  coverLetter String?
+  appliedAt   DateTime @default(now())
+  status      String   @default("pending") // pending, reviewing, accepted, rejected
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation to Career
+  career      Career   @relation(fields: [jobId], references: [id])
+
+  @@map("job_applications")
+}

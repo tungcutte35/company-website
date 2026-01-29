@@ -136,7 +136,7 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
             {[
               { label: "Giải pháp", href: "/giai-phap" },
               { label: "Blog", href: "/blog" },
-              // { label: "Mạng Lưới", href: "/mang-luoi" },
+              { label: "FAQ", href: "/faq" },
               { label: "Liên hệ", href: "/lien-he" },
             ].map((item) => (
               <Link
@@ -195,7 +195,7 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
           {[
             { label: "Giải pháp", href: "/giai-phap" },
             { label: "Blog", href: "/blog" },
-            // { label: "Mạng Lưới", href: "/#network" },
+            { label: "FAQ", href: "/faq" },
             { label: "Liên hệ", href: "/lien-he" },
           ].map((item) => (
             <Link

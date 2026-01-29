@@ -261,13 +261,18 @@ export default function SolutionsPage() {
             <span className="text-blue-400 text-sm font-medium">Giải pháp toàn diện</span>
           </div>
           
+          
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.3]">
             Giải pháp công nghệ
             <span className="block pb-1 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
               cho ngành vé
             </span>
           </h1>
-          
+
+          <p className="text-md mb-4 md:text-base text-slate-400 tracking-wide">
+            Du lịch · Hàng không · Sự kiện · Bảo tàng · Giải trí
+          </p>
+
           <p className="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             Techera cung cấp bộ giải pháp toàn diện giúp doanh nghiệp số hóa quy trình, 
             mở rộng kênh phân phối và tối ưu hóa doanh thu.

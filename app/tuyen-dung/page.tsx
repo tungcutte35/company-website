@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
@@ -30,75 +31,33 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Job positions data
-const jobPositions = [
-  {
-    id: 1,
-    title: "Senior Frontend Developer",
-    department: "Engineering",
-    location: "TP. Hồ Chí Minh",
-    type: "Full-time",
-    salary: "25 - 40 triệu",
-    description: "Phát triển và duy trì giao diện người dùng cho các sản phẩm của Techera.",
-    requirements: ["3+ năm kinh nghiệm React/Next.js", "TypeScript", "Tailwind CSS"],
-    hot: true,
-  },
-  {
-    id: 2,
-    title: "Backend Developer (Node.js)",
-    department: "Engineering",
-    location: "TP. Hồ Chí Minh",
-    type: "Full-time",
-    salary: "20 - 35 triệu",
-    description: "Xây dựng và tối ưu hóa API, database cho hệ thống phân phối vé.",
-    requirements: ["2+ năm Node.js", "PostgreSQL/MongoDB", "REST API"],
-    hot: true,
-  },
-  {
-    id: 3,
-    title: "Product Manager",
-    department: "Product",
-    location: "TP. Hồ Chí Minh",
-    type: "Full-time",
-    salary: "30 - 50 triệu",
-    description: "Định hướng và phát triển sản phẩm, làm việc với các team để đảm bảo roadmap.",
-    requirements: ["3+ năm PM experience", "Agile/Scrum", "Data-driven mindset"],
-    hot: false,
-  },
-  {
-    id: 4,
-    title: "UI/UX Designer",
-    department: "Design",
-    location: "TP. Hồ Chí Minh / Remote",
-    type: "Full-time",
-    salary: "18 - 30 triệu",
-    description: "Thiết kế trải nghiệm người dùng cho web và mobile app.",
-    requirements: ["2+ năm UI/UX", "Figma", "Design System"],
-    hot: false,
-  },
-  {
-    id: 5,
-    title: "Business Development Executive",
-    department: "Sales",
-    location: "TP. Hồ Chí Minh / Hà Nội",
-    type: "Full-time",
-    salary: "15 - 25 triệu + Hoa hồng",
-    description: "Phát triển mạng lưới đối tác, mở rộng thị trường cho Techera.",
-    requirements: ["1+ năm B2B Sales", "Kỹ năng đàm phán", "Tiếng Anh giao tiếp"],
-    hot: true,
-  },
-  {
-    id: 6,
-    title: "DevOps Engineer",
-    department: "Engineering",
-    location: "TP. Hồ Chí Minh",
-    type: "Full-time",
-    salary: "25 - 40 triệu",
-    description: "Quản lý infrastructure, CI/CD và đảm bảo hệ thống hoạt động ổn định.",
-    requirements: ["AWS/GCP", "Docker/K8s", "CI/CD pipelines"],
-    hot: false,
-  },
-];
+// Types
+interface JobPosition {
+  id: number;
+  slug: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  level: string;
+  salary: string;
+  description: string;
+  responsibilities: string[];
+  requirements: string[];
+  benefits: string[];
+  posted: string;
+  deadline: string;
+  active: boolean;
+}
+
+type CareersListCacheEntry = {
+  jobs: JobPosition[];
+  departments?: string[];
+};
+
+// Cache careers list requests (prevents double-fetch in dev Strict Mode)
+const careersListCache = new Map<string, CareersListCacheEntry>();
+const careersListInflight = new Map<string, Promise<CareersListCacheEntry>>();
 
 // Benefit Card Component
 const BenefitCard = ({ 
@@ -120,9 +79,10 @@ const BenefitCard = ({
 );
 
 // Job Card Component
-const JobCard = ({ job }: { job: typeof jobPositions[0] }) => (
+const JobCard = ({ job }: { job: JobPosition }) => (
   <div className="group bg-slate-900 rounded-2xl border border-slate-800 p-6 hover:border-blue-500/30 transition-all hover:-translate-y-1 relative overflow-hidden h-full flex flex-col">
-    {job.hot && (
+    {/* Hot badge for recently posted jobs */}
+    {new Date(job.posted) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
       <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
         <Sparkles className="w-3 h-3" />
         HOT
@@ -146,7 +106,7 @@ const JobCard = ({ job }: { job: typeof jobPositions[0] }) => (
       </p>
       
       <div className="flex flex-wrap gap-2 mb-4">
-        {job.requirements.map((req, index) => (
+        {job.requirements.slice(0, 3).map((req, index) => (
           <span key={index} className="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded">
             {req}
           </span>
@@ -186,14 +146,87 @@ export default function CareersPage() {
   const jobsRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [jobs, setJobs] = useState<JobPosition[]>([]);
+  const [departments, setDepartments] = useState<string[]>(["all"]);
+  const [loading, setLoading] = useState(true);
 
-  const departments = ["all", ...new Set(jobPositions.map(job => job.department))];
-  
-  const filteredJobs = jobPositions.filter(job => {
+  // Fetch jobs from API
+  useEffect(() => {
+    const cacheKey = selectedDepartment;
+    const cached = careersListCache.get(cacheKey);
+    if (cached) {
+      setJobs(cached.jobs);
+      if (cached.departments?.length) {
+        setDepartments(["all", ...cached.departments]);
+      }
+      setLoading(false);
+      return;
+    }
+
+    let didCancel = false;
+
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+
+        const existing = careersListInflight.get(cacheKey);
+        const promise =
+          existing ??
+          (async () => {
+            const params = new URLSearchParams();
+            if (selectedDepartment !== "all") {
+              params.append("department", selectedDepartment);
+            }
+
+            const res = await fetch(`/api/careers?${params.toString()}`);
+            const data = await res.json();
+
+            const nextJobs: JobPosition[] = data?.data?.jobs ?? [];
+            const nextDepartments: string[] | undefined = data?.data?.filters?.departments;
+
+            if (data?.success) {
+              const entry: CareersListCacheEntry = {
+                jobs: nextJobs,
+                departments: nextDepartments,
+              };
+              careersListCache.set(cacheKey, entry);
+              return entry;
+            }
+
+            return { jobs: nextJobs, departments: nextDepartments };
+          })();
+
+        if (!existing) careersListInflight.set(cacheKey, promise);
+
+        const entry = await promise;
+        careersListInflight.delete(cacheKey);
+
+        if (!didCancel) {
+          setJobs(entry.jobs);
+          if (entry.departments?.length) {
+            setDepartments(["all", ...entry.departments]);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch jobs:", error);
+      } finally {
+        if (!didCancel) setLoading(false);
+      }
+    };
+
+    fetchJobs();
+
+    return () => {
+      didCancel = true;
+    };
+  }, [selectedDepartment]);
+
+  // Filter jobs by search term
+  const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === "all" || job.department === selectedDepartment;
-    return matchesSearch && matchesDepartment;
+                         job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         job.requirements.some(req => req.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesSearch;
   });
 
   useEffect(() => {
@@ -280,17 +313,17 @@ export default function CareersPage() {
             Cùng chúng tôi tạo nên những sản phẩm có giá trị cho hàng triệu người dùng.
           </p>
 
-          <div className="flex items-center justify-center gap-4 text-slate-400">
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-blue-400" />
-              <span>{jobPositions.length} vị trí đang tuyển</span>
+            <div className="flex items-center justify-center gap-4 text-slate-400">
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-5 h-5 text-blue-400" />
+                <span>{loading ? "..." : `${jobs.length} vị trí đang tuyển`}</span>
+              </div>
+              <div className="w-1 h-1 bg-slate-600 rounded-full"></div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-green-400" />
+                <span>HCM & Remote</span>
+              </div>
             </div>
-            <div className="w-1 h-1 bg-slate-600 rounded-full"></div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-green-400" />
-              <span>HCM & Remote</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -382,13 +415,19 @@ export default function CareersPage() {
           </div>
 
           {/* Job Cards */}
-          <div ref={jobsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-            {filteredJobs.map((job) => (
-              <JobCard key={job.id} job={job} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+          ) : (
+            <div ref={jobsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              {filteredJobs.map((job) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+          )}
 
-          {filteredJobs.length === 0 && (
+          {!loading && filteredJobs.length === 0 && (
             <div className="text-center py-12">
               <p className="text-slate-400 text-lg">Không tìm thấy vị trí phù hợp</p>
             </div>

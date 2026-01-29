@@ -66,6 +66,7 @@ const TrustSignals = () => {
         >
           Được Tin Dùng Bởi Đối Tác & Doanh Nghiệp Hàng Đầu
         </p>
+        
         <div ref={containerRef} className="relative w-full overflow-hidden mask-gradient">
           {/* Mask Gradient for smooth fade on edges */}
           <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#0f172a] to-transparent z-10"></div>

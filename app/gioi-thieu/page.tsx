@@ -242,6 +242,9 @@ export default function AboutPage() {
               Phân phối vé thông minh
             </span>
           </h1>
+           <p className="text-md mb-4 md:text-base text-slate-400 tracking-wide">
+            Du lịch · Hàng không · Sự kiện · Bảo tàng · Giải trí
+          </p>
           
           <p className="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             Techera là nền tảng công nghệ hàng đầu Việt Nam trong lĩnh vực quản lý và phân phối vé du lịch, 

@@ -2,120 +2,82 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { 
   Calendar, 
   Clock, 
   ArrowRight, 
   Search,
-  Tag,
   TrendingUp,
-  BookOpen
+  BookOpen,
+  Loader2,
+  Eye,
+  Heart,
+  User,
+  Tag
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/Footer";
+import Image from "next/image";
+import { fetchJsonCached } from "@/lib/clientFetch";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Blog posts data
-const blogPosts = [
-  {
-    id: 1,
-    slug: "xu-huong-cong-nghe-du-lich-2024",
-    title: "5 xu hướng công nghệ du lịch nổi bật năm 2024",
-    excerpt: "Khám phá những công nghệ đang định hình lại ngành du lịch và cách doanh nghiệp có thể tận dụng chúng.",
-    image: "/images/blog/tech-trends.jpg",
-    category: "Xu hướng",
-    author: "Techera Team",
-    date: "15/01/2024",
-    readTime: "5 phút",
-    featured: true,
-  },
-  {
-    id: 2,
-    slug: "toi-uu-ban-ve-online",
-    title: "Hướng dẫn tối ưu hóa kênh bán vé online",
-    excerpt: "Những chiến lược và best practices để tăng tỷ lệ chuyển đổi khi bán vé trực tuyến.",
-    image: "/images/blog/online-sales.jpg",
-    category: "Hướng dẫn",
-    author: "Marketing Team",
-    date: "10/01/2024",
-    readTime: "8 phút",
-    featured: true,
-  },
-  {
-    id: 3,
-    slug: "quan-ly-dai-ly-hieu-qua",
-    title: "Bí quyết quản lý mạng lưới đại lý hiệu quả",
-    excerpt: "Cách xây dựng và duy trì mối quan hệ tốt với hệ thống đại lý phân phối vé.",
-    image: "/images/blog/agent-management.jpg",
-    category: "Kinh nghiệm",
-    author: "Business Team",
-    date: "05/01/2024",
-    readTime: "6 phút",
-    featured: false,
-  },
-  {
-    id: 4,
-    slug: "bao-mat-he-thong-ve-dien-tu",
-    title: "Đảm bảo an toàn cho hệ thống vé điện tử",
-    excerpt: "Các biện pháp bảo mật quan trọng mà mọi hệ thống vé điện tử cần triển khai.",
-    image: "/images/blog/security.jpg",
-    category: "Bảo mật",
-    author: "Tech Team",
-    date: "28/12/2023",
-    readTime: "7 phút",
-    featured: false,
-  },
-  {
-    id: 5,
-    slug: "case-study-vinpearl",
-    title: "Case Study: Chuyển đổi số tại Vinpearl",
-    excerpt: "Câu chuyện thành công trong việc số hóa quy trình quản lý vé tại chuỗi Vinpearl.",
-    image: "/images/blog/case-study.jpg",
-    category: "Case Study",
-    author: "Content Team",
-    date: "20/12/2023",
-    readTime: "10 phút",
-    featured: false,
-  },
-  {
-    id: 6,
-    slug: "kol-marketing-nganh-du-lich",
-    title: "Tận dụng KOL Marketing trong ngành du lịch",
-    excerpt: "Chiến lược hợp tác với influencer để quảng bá điểm đến và tăng doanh số bán vé.",
-    image: "/images/blog/kol-marketing.jpg",
-    category: "Marketing",
-    author: "Marketing Team",
-    date: "15/12/2023",
-    readTime: "6 phút",
-    featured: false,
-  },
-];
-
-const categories = ["Tất cả", "Xu hướng", "Hướng dẫn", "Kinh nghiệm", "Bảo mật", "Case Study", "Marketing"];
+// Types
+interface BlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  image: string | null;
+  category: string;
+  author: string;
+  authorAvatar: string | null;
+  date: string;
+  readTime: string;
+  featured: boolean;
+  tags: string[];
+  views: number;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Blog Card Component
-const BlogCard = ({ post, featured = false }: { post: typeof blogPosts[0]; featured?: boolean }) => (
-  <Link href={`/blog/${post.slug}`} className="group block">
-    <div className={`bg-slate-900/80 backdrop-blur rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all overflow-hidden ${featured ? "md:flex" : ""}`}>
-      <div className={`relative ${featured ? "md:w-1/2" : ""} aspect-video bg-slate-800 overflow-hidden`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-          <BookOpen className="w-12 h-12 text-slate-600" />
-        </div>
-        <div className="absolute top-4 left-4">
+const BlogCard = ({ post, featured = false }: { post: BlogPost; featured?: boolean }) => (
+  <Link href={`/blog/${post.slug}`} className="group block h-full">
+    <div className={`h-full bg-slate-900/80 backdrop-blur rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all overflow-hidden ${featured ? "md:flex" : "flex flex-col"}`}>
+      <div className={`relative ${featured ? "md:w-1/2" : ""} ${featured ? "md:h-full" : ""} aspect-video bg-slate-800 overflow-hidden shrink-0`}>
+        {post.image ? (
+          <Image 
+            src={post.image} 
+            alt={post.title}
+            className="object-cover w-full h-full"
+            width={500}
+            height={500}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+            <BookOpen className="w-12 h-12 text-slate-600" />
+          </div>
+        )}
+        <div className="absolute top-4 left-4 flex items-center gap-2">
           <span className="px-3 py-1 bg-blue-500/90 text-white text-xs font-medium rounded-full">
             {post.category}
           </span>
+          {post.featured && (
+            <span className="px-3 py-1 bg-orange-500/90 text-white text-xs font-medium rounded-full flex items-center gap-1">
+              ⭐ Nổi bật
+            </span>
+          )}
         </div>
       </div>
       
-      <div className={`p-6 ${featured ? "md:w-1/2 md:flex md:flex-col md:justify-center" : ""}`}>
-        <h3 className={`font-bold text-white mb-3 group-hover:text-blue-400 transition-colors ${featured ? "text-2xl" : "text-lg"}`}>
+      <div className={`p-6 flex flex-col ${featured ? "md:w-1/2" : "flex-1"}`}>
+        <h3 className={`font-bold text-white mb-3 group-hover:text-blue-400 transition-colors line-clamp-4 ${featured ? "text-2xl" : "text-lg"}`}>
           {post.title}
         </h3>
         
@@ -123,15 +85,35 @@ const BlogCard = ({ post, featured = false }: { post: typeof blogPosts[0]; featu
           {post.excerpt}
         </p>
         
-        <div className="flex items-center gap-4 text-sm text-slate-500">
+        <div className="flex items-center gap-4 text-sm text-slate-500 mb-3">
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
-            {post.date}
+            {new Date(post.date).toLocaleDateString('vi-VN')}
+          </div>
+          
+          <div className="flex items-center gap-1">
+            <Eye className="w-4 h-4" />
+            {post.views.toLocaleString()}
           </div>
           <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            {post.readTime}
+            <Heart className="w-4 h-4" />
+            {post.likes}
           </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <User className="w-4 h-4" />
+            <span>{post.author}</span>
+          </div>
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex items-center gap-1">
+              <Tag className="w-3 h-3 text-slate-500" />
+              <span className="text-xs text-slate-500">
+                {post.tags.length} tag{post.tags.length > 1 ? 's' : ''}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -142,14 +124,80 @@ export default function BlogPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Tất cả");
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<string[]>(["Tất cả"]);
+  const [loading, setLoading] = useState(true);
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribeMessage, setSubscribeMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "Tất cả" || post.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Fetch blog posts from API
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (selectedCategory !== "Tất cả") {
+          params.append('category', selectedCategory);
+        }
+        if (searchTerm) {
+          params.append('search', searchTerm);
+        }
+        
+        const data = await fetchJsonCached<{ success: boolean; data?: any; error?: string }>(
+          `/api/blog?${params.toString()}`
+        );
+        
+        if (data.success) {
+          setPosts(data.data.posts);
+          if (data.data.categories) {
+            setCategories(data.data.categories);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    // Debounce search
+    const timer = setTimeout(fetchPosts, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm, selectedCategory]);
+
+  // Newsletter subscription
+  const handleNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubscribing(true);
+    setSubscribeMessage(null);
+    
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    
+    try {
+      const data = await fetchJsonCached<{ success: boolean; message?: string; error?: string }>(
+        "/api/newsletter",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
+      
+      if (data.success) {
+        setSubscribeMessage({ type: 'success', text: data.message });
+        form.reset();
+      } else {
+        setSubscribeMessage({ type: 'error', text: data.error });
+      }
+    } catch {
+      setSubscribeMessage({ type: 'error', text: 'Có lỗi xảy ra!' });
+    } finally {
+      setSubscribing(false);
+    }
+  };
+
+  const filteredPosts = posts;
   const featuredPosts = filteredPosts.filter(post => post.featured);
   const regularPosts = filteredPosts.filter(post => !post.featured);
 
@@ -230,8 +278,15 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* Loading State */}
+      {loading && (
+        <div className="flex justify-center py-12">
+          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        </div>
+      )}
+
       {/* Featured Posts */}
-      {featuredPosts.length > 0 && (
+      {!loading && featuredPosts.length > 0 && (
         <section className="px-4 pb-12">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl font-bold text-white mb-6">Bài viết nổi bật</h2>
@@ -245,23 +300,25 @@ export default function BlogPage() {
       )}
 
       {/* All Posts */}
-      <section className="px-4 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-white mb-6">Tất cả bài viết</h2>
-          
-          {regularPosts.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {regularPosts.map((post) => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-slate-400">Không tìm thấy bài viết phù hợp</p>
-            </div>
-          )}
-        </div>
-      </section>
+      {!loading && (
+        <section className="px-4 pb-20">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl font-bold text-white mb-6">Tất cả bài viết</h2>
+            
+            {regularPosts.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {regularPosts.map((post) => (
+                  <BlogCard key={post.id} post={post} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-slate-400">Không tìm thấy bài viết phù hợp</p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Newsletter CTA */}
       <section className="py-20 px-4 bg-slate-900/50">
@@ -273,16 +330,29 @@ export default function BlogPage() {
             Nhận những bài viết mới nhất và insights hữu ích trực tiếp vào email của bạn.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-3">
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
             <input
               type="email"
+              name="email"
               placeholder="Nhập email của bạn"
+              required
               className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
             />
-            <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors cursor-pointer">
-              Đăng ký
+            <button 
+              type="submit"
+              disabled={subscribing}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {subscribing ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
+              {subscribing ? 'Đang gửi...' : 'Đăng ký'}
             </button>
-          </div>
+          </form>
+          
+          {subscribeMessage && (
+            <p className={`mt-4 text-sm ${subscribeMessage.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+              {subscribeMessage.text}
+            </p>
+          )}
         </div>
       </section>
 
