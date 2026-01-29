@@ -94,7 +94,7 @@ export default function ContactPage() {
       );
       
       if (!data.success) {
-        setSubmitError(data.errors ? data.errors.join(', ') : data.error);
+        setSubmitError(data.errors ? data.errors.join(', ') : (data.error || 'Có lỗi xảy ra'));
         return;
       }
       
@@ -358,6 +358,7 @@ export default function ContactPage() {
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
               className="rounded-2xl"
+              title="Bản đồ văn phòng Techera"
             />
           </div>
         </div>

@@ -76,10 +76,10 @@ export default function BlogPage() {
 
   const fetchPosts = async () => {
     try {
-      const result = await fetchJsonCached<{ success: boolean; data?: any }>(
+      const result = await fetchJsonCached<{ success: boolean; data?: { posts: BlogPost[] } }>(
         "/api/admin/blog"
       );
-      if (result.success) {
+      if (result.success && result.data) {
         setPosts(result.data.posts);
       }
     } catch (error) {
@@ -158,8 +158,8 @@ export default function BlogPage() {
         { method: "POST", body: uploadFormData }
       );
       
-      if (result.success) {
-        setFormData(prev => ({ ...prev, image: result.url }));
+      if (result.success && result.url) {
+        setFormData(prev => ({ ...prev, image: result.url || '' }));
         showToast('success', 'Đã tải lên hình ảnh thành công');
       } else {
         throw new Error(result.error || 'Upload failed');
@@ -184,8 +184,8 @@ export default function BlogPage() {
         { method: "POST", body: uploadFormData }
       );
       
-      if (result.success) {
-        setFormData(prev => ({ ...prev, authorAvatar: result.url }));
+      if (result.success && result.url) {
+        setFormData(prev => ({ ...prev, authorAvatar: result.url || '' }));
         showToast('success', 'Đã tải lên avatar thành công');
       } else {
         throw new Error(result.error || 'Upload failed');
@@ -243,7 +243,7 @@ export default function BlogPage() {
         ? { id: selectedPost?.id, ...formData }
         : formData;
 
-      const result = await fetchJsonCached<{ success: boolean; data?: any; error?: string }>(
+      const result = await fetchJsonCached<{ success: boolean; data?: BlogPost; error?: string }>(
         "/api/admin/blog",
         {
           method,
@@ -268,7 +268,7 @@ export default function BlogPage() {
 
   const toggleFeatured = async (id: number, featured: boolean) => {
     try {
-      const result = await fetchJsonCached<{ success: boolean; data?: any; error?: string }>(
+      const result = await fetchJsonCached<{ success: boolean; data?: BlogPost; error?: string }>(
         "/api/admin/blog",
         {
           method: "PUT",
@@ -292,7 +292,7 @@ export default function BlogPage() {
     if (!confirm('Bạn có chắc chắn muốn xóa bài viết này? Hành động này không thể hoàn tác.')) return;
     
     try {
-      const result = await fetchJsonCached<{ success: boolean; data?: any; error?: string }>(
+      const result = await fetchJsonCached<{ success: boolean; data?: { id: number }; error?: string }>(
         `/api/admin/blog?id=${id}`,
         { method: "DELETE" }
       );

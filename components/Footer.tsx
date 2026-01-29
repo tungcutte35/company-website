@@ -1,59 +1,15 @@
-"use client";
-
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../public/images/logo.jpg";
 import { MapPin, Mail, Facebook, PhoneCall, FileText } from "lucide-react";
-import gsap from "gsap";
 
 const Footer = () => {
-  const footerRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Simple fade-in animation without ScrollTrigger
-    // This ensures Footer always displays reliably
-    const ctx = gsap.context(() => {
-      if (gridRef.current) {
-        const columns = gridRef.current.children;
-        gsap.fromTo(
-          columns,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "power2.out",
-            delay: 0.2,
-          }
-        );
-      }
-
-      if (bottomRef.current) {
-        gsap.fromTo(
-          bottomRef.current,
-          { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            delay: 0.5,
-          }
-        );
-      }
-    }, footerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <footer ref={footerRef} className="bg-white border-t border-gray-200 pt-16 pb-8">
+    <footer className="bg-white border-t border-gray-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Main Footer Grid */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div className="lg:col-span-1">
             <Link href="/" className="block mb-6">
@@ -184,7 +140,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div ref={bottomRef} className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">
             © 2026 Techera. All Rights Reserved.
           </p>

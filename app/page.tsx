@@ -1,25 +1,22 @@
-import React from "react";
-// import Section from "@/components/ui/Section";
-import Header from "@/components/Header";
-import TrustSignals from "@/components/TrustSignals";
-// import Industries from "@/components/Industries";
-import Features from "@/components/Features"; 
-import Ecosystem from "@/components/Ecosystem";
-import AgentNetwork from "@/components/AgentNetwork";
-import PermissionMatrix from "@/components/PermissionMatrix";
-// import DashboardPreview from "@/components/DashboardPreview";
+import type { Metadata } from "next";
+import Navbar from "@/components/ui/Navbar";
+import HomeHero from "@/components/HomeHero";
+import HomeSections from "@/components/HomeSections.client";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Trang chủ",
+  description:
+    "TECHERA là nền tảng quản lý & phân phối vé toàn diện cho khu du lịch, sự kiện và doanh nghiệp. Tối ưu vận hành, mở rộng đại lý, tăng trưởng doanh thu.",
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 overflow-x-hidden">
-      <Header />
-      <TrustSignals />
-      <Ecosystem />
-      {/* <Industries /> */}
-      <Features />
-      <AgentNetwork />
-      <PermissionMatrix />
+      <Navbar variant="transparent" />
+      <HomeHero />
+      <HomeSections />
       <Footer />
     </div>
   );

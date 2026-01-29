@@ -185,10 +185,10 @@ export default function BlogPage() {
       );
       
       if (data.success) {
-        setSubscribeMessage({ type: 'success', text: data.message });
+        setSubscribeMessage({ type: 'success', text: data.message || 'Đăng ký thành công!' });
         form.reset();
       } else {
-        setSubscribeMessage({ type: 'error', text: data.error });
+        setSubscribeMessage({ type: 'error', text: data.error || 'Có lỗi xảy ra!' });
       }
     } catch {
       setSubscribeMessage({ type: 'error', text: 'Có lỗi xảy ra!' });

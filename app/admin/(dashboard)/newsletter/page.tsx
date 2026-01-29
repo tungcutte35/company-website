@@ -57,7 +57,7 @@ export default function NewsletterPage() {
         }
       );
       if (result.success) { showToast('success', 'Đã thêm subscriber'); fetchSubscribers(); setModalOpen(false); setNewEmail(""); }
-      else showToast('error', result.error);
+      else showToast('error', result.error || 'Có lỗi xảy ra');
     } catch { showToast('error', 'Có lỗi xảy ra'); }
     finally { setActionLoading(false); }
   };

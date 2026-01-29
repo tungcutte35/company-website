@@ -11,16 +11,18 @@ async function sendEmailNotification(message: {
   service: string;
   message: string;
 }): Promise<{ success: boolean; messageId?: string }> {
-  // Log for development
-  console.log('═══════════════════════════════════════');
-  console.log('📧 NEW CONTACT FORM SUBMISSION');
-  console.log('═══════════════════════════════════════');
-  console.log('From:', message.name, `<${message.email}>`);
-  console.log('Phone:', message.phone);
-  console.log('Company:', message.company || 'N/A');
-  console.log('Service:', message.service);
-  console.log('Message:', message.message);
-  console.log('═══════════════════════════════════════');
+  // Log only in development (avoid leaking PII in production logs)
+  if (process.env.NODE_ENV !== "production") {
+    console.log("═══════════════════════════════════════");
+    console.log("📧 NEW CONTACT FORM SUBMISSION");
+    console.log("═══════════════════════════════════════");
+    console.log("From:", message.name, `<${message.email}>`);
+    console.log("Phone:", message.phone);
+    console.log("Company:", message.company || "N/A");
+    console.log("Service:", message.service);
+    console.log("Message:", message.message);
+    console.log("═══════════════════════════════════════");
+  }
   
   // In production, integrate with email service:
   // Example with Resend:
@@ -94,8 +96,8 @@ export async function POST(request: NextRequest) {
       message: newMessage.message
     });
     
-    if (emailResult.success) {
-      console.log('✅ Email notification sent:', emailResult.messageId);
+    if (emailResult.success && process.env.NODE_ENV !== "production") {
+      console.log("✅ Email notification sent:", emailResult.messageId);
     }
 
     return NextResponse.json({

@@ -351,7 +351,7 @@ const Features = () => {
         {/* Comparison Table */}
         <div ref={comparisonRef} className="bg-surface border border-white/5 rounded-3xl p-8 overflow-hidden">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">So Sánh Hiệu Quả</h1>
+            <h2 className="text-3xl font-bold text-white mb-2">So Sánh Hiệu Quả</h2>
             <p className="text-sm text-slate-400">Lựa chọn phù hợp với mô hình kinh doanh của bạn</p>
           </div>
 

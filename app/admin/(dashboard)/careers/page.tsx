@@ -120,7 +120,7 @@ export default function CareersPage() {
         { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
       );
       if (result.success) { showToast('success', modalType === 'add' ? 'Đã tạo vị trí' : 'Đã cập nhật'); fetchJobs(); setModalOpen(false); }
-      else showToast('error', result.error);
+      else showToast('error', result.error || 'Có lỗi xảy ra');
     } catch { showToast('error', 'Có lỗi xảy ra'); }
     finally { setActionLoading(false); }
   };
