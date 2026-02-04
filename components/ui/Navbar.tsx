@@ -44,9 +44,12 @@ const DropdownMenu = ({
             : "text-slate-200 hover:text-blue-400 drop-shadow-sm"
         }`}
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        aria-label={`${label} menu`}
       >
         {label}
-        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
 
       <div className={`absolute top-full left-0 pt-2 transition-all duration-200 ${isOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"}`}>
@@ -81,8 +84,8 @@ interface NavbarProps {
   variant?: "transparent" | "solid";
 }
 
-const Navbar = ({ variant = "solid" }: NavbarProps) => {
-  const [isScrolled, setIsScrolled] = useState(variant === "solid");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Navbar = ({ variant }: NavbarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const companyDropdownItems = [
@@ -100,25 +103,12 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
     },
   ];
 
-  useEffect(() => {
-    if (variant === "transparent") {
-      const handleScroll = () => {
-        setIsScrolled(window.scrollY > 0);
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, [variant]);
-
-  const navBackground = variant === "solid" 
-    ? "bg-white shadow-lg border-b border-gray-100" 
-    : isScrolled 
-      ? "bg-white shadow-lg border-b border-gray-100" 
-      : "bg-transparent border-b border-white/10";
+  // Always use white background with shadow
+  const navBackground = "bg-white shadow-lg border-b border-gray-100";
 
   return (
     <>
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 py-3 ${navBackground}`}>
+      <nav className={`fixed  top-0 w-full z-50 transition-all duration-300 py-3 ${navBackground}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="relative w-[120px] h-[40px]">
@@ -131,7 +121,7 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
             <DropdownMenu 
               label="Công ty" 
               items={companyDropdownItems}
-              isScrolled={isScrolled || variant === "solid"}
+              isScrolled={true}
             />
             {[
               { label: "Giải pháp", href: "/giai-phap" },
@@ -142,11 +132,7 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`transition-colors font-semibold ${
-                  isScrolled || variant === "solid"
-                    ? "text-slate-600 hover:text-blue-600" 
-                    : "text-slate-200 hover:text-blue-400 drop-shadow-sm"
-                }`}
+                className="transition-colors font-semibold text-slate-600 hover:text-blue-600"
               >
                 {item.label}
               </Link>
@@ -157,11 +143,14 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
           <button 
             className="md:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
           >
             {mobileMenuOpen ? (
-              <X className={`w-6 h-6 ${isScrolled || variant === "solid" ? "text-slate-800" : "text-white"}`} />
+              <X className="w-6 h-6 text-slate-800" aria-hidden="true" />
             ) : (
-              <Menu className={`w-6 h-6 ${isScrolled || variant === "solid" ? "text-slate-800" : "text-white"}`} />
+              <Menu className="w-6 h-6 text-slate-800" aria-hidden="true" />
             )}
           </button>
 
@@ -174,7 +163,7 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
       </nav>
 
       {/* Mobile Menu */}
-      <div className={`fixed top-[64px] left-0 right-0 z-40 bg-white shadow-lg transition-all duration-300 md:hidden ${mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
+      <nav id="mobile-menu" role="navigation" aria-label="Menu di động" className={`fixed top-[64px] left-0 right-0 z-40 bg-white shadow-lg transition-all duration-300 md:hidden ${mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}>
         <div className="p-4 space-y-2">
           <div className="border-b border-gray-100 pb-2 mb-2">
             <div className="text-xs text-slate-400 uppercase tracking-wider mb-2 px-3">Công ty</div>
@@ -213,7 +202,7 @@ const Navbar = ({ variant = "solid" }: NavbarProps) => {
             </Button>
           </Link>
         </div>
-      </div>
+      </nav>
     </>
   );
 };

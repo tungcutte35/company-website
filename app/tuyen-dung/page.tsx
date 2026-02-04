@@ -368,7 +368,7 @@ export default function CareersPage() {
             <BenefitCard
               icon={Coffee}
               title="Văn phòng tuyệt vời"
-              description="Đồ ăn nhẹ, cà phê miễn phí. Phòng gym, game room để thư giãn."
+              description="Đồ ăn nhẹ, cà phê miễn phí để thư giãn."
             />
           </div>
         </div>

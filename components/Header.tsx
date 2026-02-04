@@ -146,7 +146,7 @@ const Header = () => {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 1,
+          duration: 0.8,
           stagger: 0.2,
           ease: "power3.out",
         }, 0.3);

@@ -36,7 +36,7 @@ const ContactCard = ({
 }) => (
   <div className="flex gap-4 p-6 bg-slate-900/80 backdrop-blur rounded-2xl border border-white/10">
     <div className="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-      <Icon className="w-6 h-6 text-white" />
+      <Icon className="w-6 h-6 text-white" aria-hidden="true" />
     </div>
     <div>
       <h3 className="font-semibold text-white mb-1">{title}</h3>
@@ -129,8 +129,10 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020617]">
-      <Navbar variant="solid" />
+    <>
+      <div className="min-h-screen bg-[#020617]">
+        <Navbar variant="solid" />
+        <main id="main-content" role="main">
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 relative overflow-hidden">
@@ -139,7 +141,7 @@ export default function ContactPage() {
         
         <div ref={heroRef} className="relative max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-4 py-2 mb-6">
-            <MessageSquare className="w-4 h-4 text-cyan-400" />
+            <MessageSquare className="w-4 h-4 text-cyan-400" aria-hidden="true" />
             <span className="text-cyan-400 text-sm font-medium">Liên hệ với chúng tôi</span>
           </div>
           
@@ -202,7 +204,7 @@ export default function ContactPage() {
                 {isSubmitted ? (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 mx-auto mb-4 bg-green-500/20 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-8 h-8 text-green-400" />
+                      <CheckCircle2 className="w-8 h-8 text-green-400" aria-hidden="true" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">Gửi thành công!</h3>
                     <p className="text-slate-400 mb-6">
@@ -327,12 +329,12 @@ export default function ContactPage() {
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
                           <span>Đang gửi...</span>
                         </>
                       ) : (
                         <>
-                          <Send className="w-5 h-5" />
+                          <Send className="w-5 h-5" aria-hidden="true" />
                           <span>Gửi tin nhắn</span>
                         </>
                       )}
@@ -358,7 +360,8 @@ export default function ContactPage() {
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
               className="rounded-2xl"
-              title="Bản đồ văn phòng Techera"
+              title="Bản đồ văn phòng Techera tại 63B Calmette, Quận 1, TP.HCM"
+              aria-label="Google Maps hiển thị vị trí văn phòng Techera"
             />
           </div>
         </div>
@@ -399,8 +402,9 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 }

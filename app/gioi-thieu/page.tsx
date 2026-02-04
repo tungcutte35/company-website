@@ -125,7 +125,7 @@ const ValueCard = ({
 }) => (
   <div className="group p-6 bg-slate-900 rounded-2xl border border-slate-800 hover:border-blue-500/30 transition-all hover:-translate-y-1">
     <div className={`w-14 h-14 rounded-xl ${color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-      <Icon className="w-7 h-7 text-white" />
+      <Icon className="w-7 h-7 text-white" aria-hidden="true" />
     </div>
     <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
     <p className="text-slate-400 leading-relaxed">{description}</p>
@@ -221,9 +221,11 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020617]">
-      {/* Navigation */}
-      <Navbar variant="solid" />
+    <>
+      <div className="min-h-screen bg-[#020617]">
+        {/* Navigation */}
+        <Navbar variant="solid" />
+        <main id="main-content" role="main">
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 relative overflow-hidden">
@@ -479,9 +481,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-
-      <Footer />
-    </div>
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 }
