@@ -239,9 +239,9 @@ export default function AboutPage() {
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.3]">
-            Đổi mới công nghệ
+            Giải pháp công nghệ API
             <span className="block pb-1 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-              Phân phối vé thông minh
+              
             </span>
           </h1>
            <p className="text-md mb-4 md:text-base text-slate-400 tracking-wide">

@@ -20,10 +20,11 @@ export default function HomeHero() {
 
       <div className="relative z-10 w-full pt-28 pb-16">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h1 className="text-[28px] md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-white drop-shadow-2xl">
-            TECHERA: Hệ thống Quản lý
+         
+          <h1 className="text-[28px] md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-white drop-shadow-2xl leading-[1.3]">
+            TECHERA - Giải Pháp Hệ Thống 
             <span className="block mt-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 via-white to-blue-200">
-              &amp; Phân Phối Vé Toàn Diện
+             Toàn Diện Cho Doanh Nghiệp
             </span>
           </h1>
 
